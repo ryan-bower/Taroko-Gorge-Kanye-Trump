@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html><head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <!--
+
+  Nick Montfort
+   Original Python program:
+   8 January 2009, Taroko Gorge National Park, Taiwan and Eva Air Flight 28
+   This JavaScript version, with links:
+   1 March 2016
+
+  Copyright (c) 2009-2016 Nick Montfort <nickm@nickm.com>
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+  SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
+  IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+  -->
+  <style type="text/css">
+    /* <![CDATA[ */
+    body {
+      background: #797777;
+      color: white;
+      margin: 0 24pt 0 24pt;
+      font-family: Optima, sans-serif;
+      font-size: 13pt;
+    }
+    div {
+      height: 16pt;
+    }
+    a {
+      color: #117;
+      text-decoration: none;
+    }
+    /* ]]> */
+  </style>
+  <script type="text/javascript">
+      const speakers = [ {
+          "name":"Donald Trump",
+          "maxLines":4,
+          "questionChance":5,
+          "id":0
+      }, {
+          "name":"Kanye West",
+          "maxLines":12,
+          "questionChance":2,
+          "id":1
+      }, {
+          "name":"Reporter",
+          "maxLines":2,
+          "questionChance":10,
+          "id":2
+      }, {
+          "name":"Jim Brown",
+          "maxLines":1,
+          "questionChance":0,
+          "id":3
+      } ];
+      const question = ("do you think so|right|huh|what happened|why was he in|what was the sentence|what prison is that|" +
+          "how old is he|i love everyone, right|why would you keep something around that's a trap door|do we|" +
+          "no|what do you do after that|isn't that a great statement|how do you respond to that|what do you make of that|" +
+          "you think racism could control me|you reject those who say he's a racist|you say don't tear down the statues|" +
+          "what about gun violence|how do you fix that|do you think you can change his mind|is this a future presidential candidate|" +
+          "isn't it good energy|how do you feel|").split("|");
+
+      const reporterQuestion = ("is it a law enforcement issue|what do you want this meeting to lead to|what else can be done in chicago|" +
+          "what do you feel about stop and frisk|is this a future presidential candidate|would you like him to speak at one of your rallies|" +
+          "do you think you can change his mind|what about gun violence, how do you fix that|you reject those who say he's racist|").split("|");
+
+      const properNoun = ("Apple|Air Force One|Ford|Wisconsin|People|our President|Saturday Night Live|" +
+          "Minnesota|Tesla|Freud|13th Amendment|Unabomber|Chicago|Middle America|Democrats|Chairman Kim|the NBA|the NFL|" +
+          "Hillary|Oval Office|Art Programs|4D Chess|illegal guns").split("|");
+      const person = ("Trump|me|you|").split("|");
+      const shortLine = ("we're going to discuss that|I'm open-minded|I'm here|It's good energy|").split("|");
+      // main loop logic variables
+      var numDivs=0;
+      var n=0;
+      var text='';
+
+      // speaker variables
+      var speakerID = 1;
+      var speaker = getSpeakerByID(speakerID);
+      var nextSpeaker = null;
+      var remainingLines = 0;
+
+      // get a random number 0 to max
+      function rand_range(max) {
+          var val = Math.floor(Math.random()*(max+1));
+          console.log("random: " + val);
+          return val;
+      }
+
+      // get a random element from the array
+      function choose(array) {
+          return array[rand_range(array.length-1)];
+      }
+
+      // Picks a new speaker, other than the current one
+      function chooseNewSpeaker(lastID) {
+          var newID = lastID;
+          //will have 3/4 chance to pick just trump or kanye
+          var max = rand_range(4) !== 0 ? 2 : 4;
+
+          // get an id diff from last one, and one that isn't outside of the range
+          while(newID === lastID || newID === 4) {
+              newID = rand_range(max);
+          }
+          return getSpeakerByID(newID);
+      }
+
+      // returns a speaker object based on an id
+      function getSpeakerByID(speakerID) {
+          return speakers.find(function(s) {
+              return s.id === speakerID;
+          });
+      }
+
+      // prints the first line with the speaker's name
+      function addFirstLine() {
+          text += "\n" + speaker.name.substring(0,speaker.name.length).toUpperCase() + ": ";
+          addLine();
+      }
+
+      // decide if a question should be asked
+      function willAskQuestion(qChance) {
+          return qChance > rand_range(10);
+      }
+
+      // generates a line of text
+      function addLine() {
+          // see if they're going to ask a question
+          const isQ = willAskQuestion(speaker.questionChance);
+          switch (speaker.id) {
+              case 0:
+                  addTrumpLine(isQ);
+                  break;
+              case 1:
+                  addKanyeLine(isQ);
+                  break;
+              case 2:
+                  addReporterLine(isQ);
+                  break;
+              case 3:
+                  addBrownLine(isQ);
+                  break;
+          }
+      }
+
+      function addQuestion() {
+          const index = rand_range(10);
+          var line;
+
+          switch (index) {
+              case 0:
+                  line += "do you know " + chooseNewSpeaker(speakerID).name;
+                  break;
+              case 1:
+                line += "can we get rid of " + choose(properNoun)
+                  break;
+              case 2:
+                line += "isn't that a great statement";
+                break;
+          /* else if (index === 3) {
+              line += "";
+          } else if (index => 8 && index <= 9) {
+              line += "";
+          }*/ default:
+              line += choose(question);
+          }
+
+          // add the line to the text to be printed
+          text += line + "?";
+      }
+
+      function addReporterQuestion() {
+          const index = rand_range(10);
+          const line = choose(reporterQuestion);
+
+          switch (index) {
+              case 0: //diff variations
+          }
+
+          text += line + "?";
+      }
+
+      // creates a line for Trump
+      function addTrumpLine(isQ) {
+          if (isQ) {
+              addQuestion();
+          } else {
+
+          }
+      }
+
+      // creates a line for Kanye
+      function addKanyeLine(isQ) {
+          if (isQ) {
+              addQuestion();
+          } else {
+
+          }
+      }
+
+      // creates a line for a reporter
+      function addReporterLine(isQ) {
+          if (isQ) {
+              addReporterQuestion();
+          } else {
+              text = "It's an honor, sir.";
+          }
+      }
+
+      // prints a new line
+      function printLine() {
+          text = text.substring(0,1).toUpperCase()+text.substring(1,text.length);
+          last = document.createElement('div');
+          last.appendChild(document.createTextNode(text));
+          main.appendChild(last);
+          text = "";
+      }
+
+      function do_line() {
+          var main=document.getElementById('main');
+          if (numDivs<=25) {
+              // wait until 25 divs have been created
+              numDivs+=1;
+          } else {
+              // remove unseen div after 25 appear
+              main.removeChild(document.getElementById('main').firstChild);
+          }
+
+          //main loop
+
+          // if the speaker is out of lines
+          if (remainingLines <= 0) {
+              console.log("remaining lines: " + remainingLines);
+              // if the next speaker hasn't been chosen, pick one
+              if (nextSpeaker === null) {
+                  nextSpeaker = chooseNewSpeaker(speaker.id);
+                  speakerID = nextSpeaker.id;
+              }
+
+              // set new speaker and reset next
+              speaker = getSpeakerByID(speakerID);
+              nextSpeaker = null;
+              console.log("new speaker: ");
+              console.log(speaker);
+
+              // print first line
+              addFirstLine();
+
+              // calc number of lines for the speaker
+              remainingLines = rand_range(speaker.maxLines) + 1;
+
+              // if the speaker needs to speak
+          } else {
+              remainingLines -= 1;
+              addLine();
+          }
+
+          //end main loop
+
+          // print the text value
+          printLine();
+      }
+
+      // run main loop every 1 second
+      function poem() {
+          setInterval(do_line, 1000);
+      }
+  </script>
+  <title>Taroko Gorge</title>
+</head>
+<body onload="poem()">
+
+<div id="main"><div> </div><div> </div></div>
+
+
+</body></html>
