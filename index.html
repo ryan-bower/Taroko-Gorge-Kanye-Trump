@@ -34,7 +34,7 @@
       font-size: 13pt;
     }
     div {
-      height: 16pt;
+      min-height: 16px;
     }
     a {
       color: #117;
@@ -78,12 +78,15 @@
       const properNoun = ("Apple|Air Force One|Ford|Wisconsin|People|our President|Saturday Night Live|" +
           "Minnesota|Tesla|Freud|13th Amendment|Unabomber|Chicago|Middle America|Democrats|Chairman Kim|the NBA|the NFL|" +
           "Hillary|Oval Office|Art Programs|4D Chess|illegal guns").split("|");
+
       const person = ("Trump|me|you|").split("|");
-      const shortLine = ("we're going to discuss that|I'm open-minded|I'm here|It's good energy|").split("|");
+      const shortLine = ("we're going to discuss that|I'm open-minded|I'm here|It's good energy|never thought about it|" +
+          "they say|I loved all the sports|it's great to have you|it's good to be here|I like north korea").split("|");
       // main loop logic variables
       var numDivs=0;
       var n=0;
       var text='';
+      var lastText = text;
 
       // speaker variables
       var speakerID = 1;
@@ -125,7 +128,8 @@
 
       // prints the first line with the speaker's name
       function addFirstLine() {
-          text += "\n" + speaker.name.substring(0,speaker.name.length).toUpperCase() + ": ";
+          printEmptyLine();
+          text += speaker.name.substring(0,speaker.name.length).toUpperCase() + ": ";
           addLine();
       }
 
@@ -140,14 +144,24 @@
           const isQ = willAskQuestion(speaker.questionChance);
           switch (speaker.id) {
               case 0:
-                  addTrumpLine(isQ);
-                  break;
+                  if (isQ) {
+                      addQuestion();
+                  } else {
+                      addTrumpLine();
+                  } break;
               case 1:
-                  addKanyeLine(isQ);
+                  if (isQ) {
+                      addQuestion();
+                  } else {
+                      addKanyeLine();
+                  } break;
                   break;
               case 2:
-                  addReporterLine(isQ);
-                  break;
+                  if (isQ) {
+                      addReporterQuestion();
+                  } else {
+                      text = "It's an honor, sir.";
+                  } break;
               case 3:
                   addBrownLine(isQ);
                   break;
@@ -163,17 +177,17 @@
                   line += "do you know " + chooseNewSpeaker(speakerID).name;
                   break;
               case 1:
-                line += "can we get rid of " + choose(properNoun)
+                  line += "can we get rid of " + choose(properNoun)
                   break;
               case 2:
-                line += "isn't that a great statement";
-                break;
+                  line += "isn't that a great statement";
+                  break;
           /* else if (index === 3) {
               line += "";
           } else if (index => 8 && index <= 9) {
               line += "";
           }*/ default:
-              line += choose(question);
+                  line += choose(question);
           }
 
           // add the line to the text to be printed
@@ -185,7 +199,8 @@
           const line = choose(reporterQuestion);
 
           switch (index) {
-              case 0: //diff variations
+              case 0:
+                  text += "Can I just ask a quick question of Kanye?";
           }
 
           text += line + "?";
@@ -224,7 +239,15 @@
           last = document.createElement('div');
           last.appendChild(document.createTextNode(text));
           main.appendChild(last);
+          lastText = text;
           text = "";
+      }
+
+      function printEmptyLine() {
+          const div = document.createElement('div');
+          const txt = document.createTextNode(" ");
+          div.appendChild(txt);
+          main.appendChild(div);
       }
 
       function do_line() {
@@ -248,7 +271,7 @@
                   speakerID = nextSpeaker.id;
               }
 
-              // set new speaker and reset next
+              // set new speaker, and reset next
               speaker = getSpeakerByID(speakerID);
               nextSpeaker = null;
               console.log("new speaker: ");
@@ -282,6 +305,5 @@
 <body onload="poem()">
 
 <div id="main"><div> </div><div> </div></div>
-
 
 </body></html>
