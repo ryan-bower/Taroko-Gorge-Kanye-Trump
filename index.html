@@ -27,8 +27,7 @@
   <style type="text/css">
     /* <![CDATA[ */
     body {
-      background: #797777;
-      color: white;
+      background: white;
       margin: 0 24pt 0 24pt;
       font-family: Optima, sans-serif;
       font-size: 13pt;
@@ -40,48 +39,83 @@
       color: #117;
       text-decoration: none;
     }
+    .speaker0 {
+        color: goldenrod;
+    }
+    .speaker1 {
+        color: red;
+    }
+    .speaker2 {
+        color: black;
+    }
+    .speaker3 {
+        color: orange;
+    }
     /* ]]> */
   </style>
+
+    <script type="text/javascript">
+        const speakers = [ {
+            "name":"Donald Trump",
+            "maxLines":4,
+            "questionChance":5,
+            "id":0
+        }, {
+            "name":"Kanye West",
+            "maxLines":8,
+            "questionChance":2,
+            "id":1
+        }, {
+            "name":"Reporter",
+            "maxLines":1,
+            "questionChance":10,
+            "id":2
+        }, {
+            "name":"Jim Brown",
+            "maxLines":1,
+            "questionChance":0,
+            "id":3
+        } ];
+        const TRUMP_ID = 0;
+        const KANYE_ID = 1;
+        const question = ("do you think so|right|huh|what happened|why was he in|what was the sentence|what prison is that|" +
+            "how old is he|i love everyone, right|why would you keep something around that's a trap door|do we|" +
+            "no|what do you do after that|isn't that a great statement|how do you respond to that|what do you make of that|" +
+            "you think racism could control me|you reject those who say he's a racist|you say don't tear down the statues|" +
+            "what about gun violence|how do you fix that|do you think you can change his mind|is this a future presidential candidate|" +
+            "isn't it good energy|how do you feel").split("|");
+
+        const reporterQuestion = ("is it a law enforcement issue|what do you want this meeting to lead to|what else can be done in chicago|" +
+            "what do you feel about stop and frisk|is this a future presidential candidate|would you like him to speak at one of your rallies|" +
+            "do you think you can change his mind|what about gun violence, how do you fix that|you reject those who say he's racist").split("|");
+
+        const properNoun = ("Apple|Air Force One|Ford|Wisconsin|People|our President|Saturday Night Live|" +
+            "Minnesota|Tesla|Freud|13th Amendment|Unabomber|Chicago|Middle America|Democrats|Chairman Kim|the NBA|the NFL|" +
+            "Hillary|Oval Office|Art Programs|4D Chess|illegal guns").split("|");
+
+        const shortLine = ("we're going to discuss that|I'm open-minded|I'm here|It's good energy|never thought about it|" +
+            "they say|I loved all the sports|it's great to have you|it's good to be here|I like north korea").split("|");
+
+        const kanyeLine = ("we need to care about all people|I went on to NBC|I was programmed to think from a victimized mentality|" +
+            "we really get caught up in the idea of racism over the idea of industry|if people don’t have land, they settle for brands|" +
+            "when you don’t have ownership, then it’s all about how something looks|it’s about the patina|it’s not about the soul|" +
+            "it’s not about the core|we talk about police murders, which we definitely have to discuss|there’s this whole hate-building|" +
+            "we have to take a responsibility for what we’re doing|we kill each other more than police officers|" +
+            "sometimes they’re in a place of law enforcement|they need to be law-power|it’s force versus power").split("|");
+
+        const trumpLine = ("it’s great to be with you|these are two friends of mine|A long time ago we met|I just appreciated it very much|" +
+            "we’re keeping our promise|I want to thank you|I like North Korea too|he's — turned out to be good|It was so close|" +
+            "we had very good meetings, and we'll meet again|I will tell you, that was headed to war|I believe it’s going to work out very well|" +
+            "saved millions of lives|you don’t realize how big|it was a big solving|that’s one of many things|I appreciate everything with you|" +
+            "she was very unfairly treated|there are many other people like that|yes, tell me. Tell us|Wisconsin. Yeah. Wisconsin|" +
+            "you don’t like that idea|it’s true|that was pretty impressive, folks").split("|");
+
+        const brownLine = ("if he doesn’t look good, we don’t look good|yes, it is|makes a lot of sense|yeah, yeah. It makes a lot of sense|" +
+            "yes, sir|I feel good. I truly feel good|and thank you, too|it's an honor you would be here|well, you know why I’m here? I’m here to serve|" +
+            "I’m not here to ask of anything").split("|");
+    </script>
   <script type="text/javascript">
-      const speakers = [ {
-          "name":"Donald Trump",
-          "maxLines":4,
-          "questionChance":5,
-          "id":0
-      }, {
-          "name":"Kanye West",
-          "maxLines":12,
-          "questionChance":2,
-          "id":1
-      }, {
-          "name":"Reporter",
-          "maxLines":2,
-          "questionChance":10,
-          "id":2
-      }, {
-          "name":"Jim Brown",
-          "maxLines":1,
-          "questionChance":0,
-          "id":3
-      } ];
-      const question = ("do you think so|right|huh|what happened|why was he in|what was the sentence|what prison is that|" +
-          "how old is he|i love everyone, right|why would you keep something around that's a trap door|do we|" +
-          "no|what do you do after that|isn't that a great statement|how do you respond to that|what do you make of that|" +
-          "you think racism could control me|you reject those who say he's a racist|you say don't tear down the statues|" +
-          "what about gun violence|how do you fix that|do you think you can change his mind|is this a future presidential candidate|" +
-          "isn't it good energy|how do you feel|").split("|");
 
-      const reporterQuestion = ("is it a law enforcement issue|what do you want this meeting to lead to|what else can be done in chicago|" +
-          "what do you feel about stop and frisk|is this a future presidential candidate|would you like him to speak at one of your rallies|" +
-          "do you think you can change his mind|what about gun violence, how do you fix that|you reject those who say he's racist|").split("|");
-
-      const properNoun = ("Apple|Air Force One|Ford|Wisconsin|People|our President|Saturday Night Live|" +
-          "Minnesota|Tesla|Freud|13th Amendment|Unabomber|Chicago|Middle America|Democrats|Chairman Kim|the NBA|the NFL|" +
-          "Hillary|Oval Office|Art Programs|4D Chess|illegal guns").split("|");
-
-      const person = ("Trump|me|you|").split("|");
-      const shortLine = ("we're going to discuss that|I'm open-minded|I'm here|It's good energy|never thought about it|" +
-          "they say|I loved all the sports|it's great to have you|it's good to be here|I like north korea").split("|");
       // main loop logic variables
       var numDivs=0;
       var n=0;
@@ -89,15 +123,15 @@
       var lastText = text;
 
       // speaker variables
-      var speakerID = 1;
-      var speaker = getSpeakerByID(speakerID);
-      var nextSpeaker = null;
+      var speaker = getSpeakerByID(0);
+      var nextSpeaker = getSpeakerByID(0);
+      var prevSpeaker = getSpeakerByID(0);
       var remainingLines = 0;
 
+      // HELPER FUNCTIONS ---------------------------------------------------------------
       // get a random number 0 to max
       function rand_range(max) {
           var val = Math.floor(Math.random()*(max+1));
-          console.log("random: " + val);
           return val;
       }
 
@@ -109,23 +143,48 @@
       // Picks a new speaker, other than the current one
       function chooseNewSpeaker(lastID) {
           var newID = lastID;
-          //will have 3/4 chance to pick just trump or kanye
-          var max = rand_range(4) !== 0 ? 2 : 4;
+          //will have 7/8 chance to pick just trump or Kanye
+          var max = rand_range(8) !== 0 ? 2 : 4;
 
           // get an id diff from last one, and one that isn't outside of the range
           while(newID === lastID || newID === 4) {
               newID = rand_range(max);
           }
+
           return getSpeakerByID(newID);
+      }
+
+      // returns the speaks array of objects
+      function getAllSpeakers() {
+          return speakers;
+      }
+
+      // returns the current speaker
+      function getSpeaker() {
+          return speaker;
+      }
+
+      // sets a new current speaker
+      function setSpeaker(s) {
+          speaker = s;
       }
 
       // returns a speaker object based on an id
       function getSpeakerByID(speakerID) {
-          return speakers.find(function(s) {
-              return s.id === speakerID;
-          });
+          const theSpeaker = getAllSpeakers().filter(s => s.id === speakerID)[0];
+          return theSpeaker;
       }
 
+      // sets the new speaker
+      function setNewSpeaker(speakerID) {
+          prevSpeaker = getSpeaker();
+          setSpeaker(getSpeakerByID(speakerID));
+          nextSpeaker = null;
+      }
+      // END HELPER FUNCTIONS -----------------------------------------------------------
+
+
+      // PRINT LINES --------------------------------------------------------------------
       // prints the first line with the speaker's name
       function addFirstLine() {
           printEmptyLine();
@@ -133,23 +192,18 @@
           addLine();
       }
 
-      // decide if a question should be asked
-      function willAskQuestion(qChance) {
-          return qChance > rand_range(10);
-      }
-
       // generates a line of text
       function addLine() {
           // see if they're going to ask a question
           const isQ = willAskQuestion(speaker.questionChance);
           switch (speaker.id) {
-              case 0:
+              case TRUMP_ID:
                   if (isQ) {
                       addQuestion();
                   } else {
                       addTrumpLine();
                   } break;
-              case 1:
+              case KANYE_ID:
                   if (isQ) {
                       addQuestion();
                   } else {
@@ -157,27 +211,52 @@
                   } break;
                   break;
               case 2:
-                  if (isQ) {
-                      addReporterQuestion();
-                  } else {
-                      text = "It's an honor, sir.";
-                  } break;
+                  addReporterQuestion();
+                  break;
               case 3:
                   addBrownLine(isQ);
                   break;
           }
       }
 
+      // prints a new line
+      function printLine() {
+          text = text.substring(0,1).toUpperCase() + text.substring(1,text.length);
+          const div = document.createElement('div');
+          div.setAttribute("class", "speaker" + getSpeaker().id);
+          div.appendChild(document.createTextNode(text));
+          main.appendChild(div);
+          lastText = text;
+          text = "";
+      }
+
+      // prints a blank div for spacing
+      function printEmptyLine() {
+          const div = document.createElement('div');
+          const txt = document.createTextNode(" ");
+          div.appendChild(txt);
+          main.appendChild(div);
+          if (numDivs >=25 ) { main.removeChild(document.getElementById('main').firstChild); }
+      }
+      // END PRINT LINES ----------------------------------------------------------------
+
+
+      // QUESTIONS ----------------------------------------------------------------------
+      // decides if a question should be asked
+      function willAskQuestion(qChance) {
+          return qChance > rand_range(10);
+      }
+      // used to add a question
       function addQuestion() {
           const index = rand_range(10);
-          var line;
+          var line = "";
 
           switch (index) {
               case 0:
-                  line += "do you know " + chooseNewSpeaker(speakerID).name;
+                  line += "do you know " + chooseNewSpeaker(getSpeaker().id).name;
                   break;
               case 1:
-                  line += "can we get rid of " + choose(properNoun)
+                  line += "can we get rid of " + choose(properNoun);
                   break;
               case 2:
                   line += "isn't that a great statement";
@@ -194,24 +273,44 @@
           text += line + "?";
       }
 
+      // adds a reporter question to text
       function addReporterQuestion() {
-          const index = rand_range(10);
-          const line = choose(reporterQuestion);
+          const index = rand_range(5);
+          var line = choose(reporterQuestion);
 
           switch (index) {
               case 0:
-                  text += "Can I just ask a quick question of Kanye?";
+                  line = "(Laughs.) Okay.";
+                  break;
+              case 1:
+                  line = "Mr. Trump, " + line + "?";
+                  nextSpeaker = getSpeakerByID(TRUMP_ID);
+                  break;
+              case 2:
+                  line = "Mr. President, " + line + "?";
+                  nextSpeaker = getSpeakerByID(TRUMP_ID);
+                  break;
+              case 3:
+                  line = "But don't you think — " + line + "?";
+                  break;
+              default:
+                  line = "Mr. West, " + line + "?";
+                  nextSpeaker = getSpeakerByID(KANYE_ID);
           }
 
-          text += line + "?";
+          text += line;
       }
+      // END QUESTIONS ------------------------------------------------------------------
 
+
+      // STATEMENTS ---------------------------------------------------------------------
       // creates a line for Trump
       function addTrumpLine(isQ) {
           if (isQ) {
               addQuestion();
           } else {
-
+              var line = choose(trumpLine);
+              text += line.substr(0, 1).toUpperCase() + line.substr(1, line.length) + ".";
           }
       }
 
@@ -220,36 +319,19 @@
           if (isQ) {
               addQuestion();
           } else {
-
+              var line = choose(kanyeLine);
+              text += line.substr(0, 1).toUpperCase() + line.substr(1, line.length) + ".";
           }
       }
 
-      // creates a line for a reporter
-      function addReporterLine(isQ) {
-          if (isQ) {
-              addReporterQuestion();
-          } else {
-              text = "It's an honor, sir.";
-          }
+      // creates a line for Brown
+      function addBrownLine(isQ) {
+          var line = choose(brownLine);
+          text += line.substr(0, 1).toUpperCase() + line.substr(1, line.length) + ".";
       }
+      // END STATEMENTS -----------------------------------------------------------------
 
-      // prints a new line
-      function printLine() {
-          text = text.substring(0,1).toUpperCase()+text.substring(1,text.length);
-          last = document.createElement('div');
-          last.appendChild(document.createTextNode(text));
-          main.appendChild(last);
-          lastText = text;
-          text = "";
-      }
-
-      function printEmptyLine() {
-          const div = document.createElement('div');
-          const txt = document.createTextNode(" ");
-          div.appendChild(txt);
-          main.appendChild(div);
-      }
-
+      // main loop
       function do_line() {
           var main=document.getElementById('main');
           if (numDivs<=25) {
@@ -260,36 +342,31 @@
               main.removeChild(document.getElementById('main').firstChild);
           }
 
-          //main loop
-
+          // MAIN LOOP ------------------------------------
+          console.log("Remaining lines: " + remainingLines);
           // if the speaker is out of lines
           if (remainingLines <= 0) {
-              console.log("remaining lines: " + remainingLines);
               // if the next speaker hasn't been chosen, pick one
               if (nextSpeaker === null) {
-                  nextSpeaker = chooseNewSpeaker(speaker.id);
-                  speakerID = nextSpeaker.id;
+                  const chosen = chooseNewSpeaker(getSpeaker().id);
+                  setNewSpeaker(chosen.id);
+              } else {
+                  // assign the next speaker
+                  setNewSpeaker(nextSpeaker.id);
               }
-
-              // set new speaker, and reset next
-              speaker = getSpeakerByID(speakerID);
-              nextSpeaker = null;
-              console.log("new speaker: ");
-              console.log(speaker);
 
               // print first line
               addFirstLine();
 
               // calc number of lines for the speaker
-              remainingLines = rand_range(speaker.maxLines) + 1;
+              remainingLines = rand_range(speaker.maxLines);
 
               // if the speaker needs to speak
           } else {
               remainingLines -= 1;
               addLine();
           }
-
-          //end main loop
+          // END MAIN LOOP --------------------------------
 
           // print the text value
           printLine();
@@ -297,6 +374,7 @@
 
       // run main loop every 1 second
       function poem() {
+          setNewSpeaker(0);
           setInterval(do_line, 1000);
       }
   </script>
